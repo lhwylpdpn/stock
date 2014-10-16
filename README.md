@@ -5,8 +5,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1-3、实时数据和历史数据如何整合<br>
 2、找出百度指数、微博传阅、等等更多的全量数据、找出数据、时间维度间的其他隐含关系 0%<br>
 3、根据已知的关系，历史假设购买计算效果收益 0%<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3-1、需要全部股票计算CCI指数，不利用i
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3-1、需要自动买卖和计算收益的试验函数
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3-1、需要全部股票计算CCI指数，不利用i<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3-1、需要自动买卖和计算收益的试验函数<br>
 4、找出买入时间的指导点 0%<br>
 5、找出卖出时间的指导点 0%<br>
 5、自动化交易 0%<br>

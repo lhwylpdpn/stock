@@ -12,11 +12,17 @@ def timer (stockid):#核心函数，查URL写数据库,计算指标库
 	del data_line[0]
 	del data_line[len(data_line)-1]
 	#print(len(data_line))
-	for data in data_line:
-		datas=data.split(',')
-		sql="insert into stock.stock values('"+stockid+"','"+datas[0]+"','"+datas[2]+"','"+datas[3]+"','"+datas[1]+"','"+datas[4]+"','"+datas[6]+"','"+datas[5]+"',null,null)"
-		#print (sql)
-		cur.execute(sql)
+	#for data in data_line:
+	sql=""
+	for i in range(len(data_line)):
+		datas=data_line[i].split(',')
+		if i<len(data_line)-1:
+			datas_yes=data_line[i+1].split(',')
+			sql=sql+"insert into stock.stock values('"+stockid+"','"+datas[0]+"','"+datas[2]+"','"+datas[3]+"','"+datas[1]+"','"+datas[4]+"','"+datas[6]+"','"+datas[5]+"','"+str((float(datas[4])-float(datas_yes[4]))/float(datas_yes[4]))+"',null);"
+		else:
+			sql=sql+"insert into stock.stock values('"+stockid+"','"+datas[0]+"','"+datas[2]+"','"+datas[3]+"','"+datas[1]+"','"+datas[4]+"','"+datas[6]+"','"+datas[5]+"',null,null);"
+	#print (sql)
+	cur.execute(sql)
 	print(stockid+" is ok"+str(time.time()-time1)) 
 
 	conn.commit()

@@ -1,3 +1,4 @@
+#coding:utf-8
 import threading
 import urllib
 import urllib.request
@@ -68,22 +69,23 @@ if __name__ == "__main__":
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock',port=3306)
 	curall=conn.cursor()
 	cur=conn.cursor()
-	#curall.execute("delete from stock")
+	curall.execute("delete from stock")
 	#curall.execute("delete from target")
 	#curall.execute("delete from clac1")
-	curall.execute("SELECT CONCAT(CODE,class) FROM stock_code2 WHERE STATUS=1")
+	curall.execute("SELECT CONCAT(CODE,class) FROM stock_code WHERE STATUS=1")
 	stone=curall.fetchall()
 	for r in stone:
 		try:
 			timer(str(r[0]))
 		except:
+			print("error   "+str(r[0]))
 			continue
 	#target()
-	for r in stone:
-		try:
-			calc(str(r[0]))
-		except:
-			continue
+	#for r in stone:
+	#	try:
+	#		calc(str(r[0]))
+	#	except:
+	#		continue
 	conn.commit()
 	
 	

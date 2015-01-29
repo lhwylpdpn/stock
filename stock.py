@@ -20,7 +20,7 @@ def timer (stockid):#核心函数，查URL写数据库,计算指标库
 			datas_yes=data_line[i+1].split(',')
 			sql=sql+"insert into stock.stock values('"+stockid+"','"+datas[0]+"','"+datas[2]+"','"+datas[3]+"','"+datas[1]+"','"+datas[4]+"','"+datas[6]+"','"+datas[5]+"','"+str((float(datas[4])-float(datas_yes[4]))/float(datas_yes[4]))+"',null);"
 		else:
-			sql=sql+"insert into stock.stock values('"+stockid+"','"+datas[0]+"','"+datas[2]+"','"+datas[3]+"','"+datas[1]+"','"+datas[4]+"','"+datas[6]+"','"+datas[5]+"',null,null);"
+			sql=sql+"insert into stock.stock values('"+stockid+"','"+datas[0]+"','"+datas[2]+"','"+datas[3]+"','"+datas[1]+"','"+datas[4]+"','"+datas[6]+"','"+datas[5]+"',0,null);"
 	#print (sql)
 	cur.execute(sql)
 	print(stockid+" is ok"+str(time.time()-time1)) 
@@ -34,21 +34,53 @@ def target():#写入各种参照值
 	cur.execute(sql)
 	print("000300.ss target is ok")
 	conn.commit()
-def calc(stockid):#计算个股与指标之间的相关度
-	pearson_1=[]
-	pearson_2=[]
-	sql=" SELECT a.c,b.`000300.ss_clac` FROM (SELECT a.date,a.close, (a.close - b.close)/a.close AS c FROM (SELECT  (@i:=@i+1)   AS   i,stockid,DATE,CLOSE FROM stock ,(SELECT   @i:=1) AS it WHERE stockid='"+stockid+"' ORDER BY DATE DESC) AS a ,(SELECT  (@j:=@j+1)   AS   i,stockid,DATE,CLOSE FROM stock ,(SELECT   @j:=0) AS it WHERE stockid='"+stockid+"' ORDER BY DATE DESC) AS b WHERE a.i=b.i ) a,target b WHERE a.date =b.date "
-
+def calc():#计算个股与指标之间的相关度
+	close_1=[]
+	close_2=[]
+	per_1=[]
+	per_2=[]
+	date1=[]
+	stockid=[]
+	a=[]
+	b=[]
+	sql="select stockid from stock group by stockid"
 	cur.execute(sql)
-	r_clac=cur.fetchall()
-	for r in r_clac:
-		pearson_1.append(float(r[0]))
-		pearson_2.append(float(r[1]))
-	#print(str(pearson(pearson_1,pearson_2)))
-	sql="insert into clac1 (stockid, relativity) values ('"+stockid+"','"+str(pearson(pearson_1,pearson_2))+"')"
-	cur.execute(sql)
-	print(stockid+" 计算 is ok 总计用时间"+str(time.time()-time1)) 
-	conn.commit()
+	res=cur.fetchall()
+	dict1={}
+	for r in res:
+		print(r[0])
+		stockid.append(r[0])
+	for i in range(len(stockid)):
+		for j in range(len(stockid)):
+			if i<j:
+				dict1[stockid[i]]=stockid[j]
+	
+	#cur.execute(sql)
+	#r_clac=cur.fetchall()
+	for (d,x) in dict1.items():
+		sql="select a.date,a.close,b.close,a.per,b.per from stock a ,stock b where a.stockid='"+d+"' and b.stockid='"+x+"' and a.date=b.date order by date desc"
+		cur.execute(sql)
+		res=cur.fetchall()
+		for r in res:
+			close_1.append(float(r[1]))
+			close_2.append(float(r[2]))
+			per_1.append(float(r[3]))
+			per_2.append(float(r[4]))
+			date1.append(str(r[0]))
+		sql="insert into releation values('"+d+"','"+x+"','"+str(pearson(close_1[0:30],close_2[0:30]))+"','"+str(pearson(close_1[0:365],close_2[0:365]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:30],per_2[0:30]))+"','"+str(pearson(per_1[0:365],per_2[0:365]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
+		cur.execute(sql)
+		print(str(pearson(close_1,close_2)))
+		print(str(pearson(per_1,per_2)))
+		print(str(pearson(close_1[0:30],close_2[0:30])))
+		print(str(pearson(per_1[0:30],per_2[0:30])))
+		print(str(pearson(close_1[0:365],close_2[0:365])))
+		print(str(pearson(per_1[0:365],per_2[0:365])))
+		print(len(res))
+	
+	#sql="insert into clac1 (stockid, relativity) values ('"+stockid+"','"+str(pearson(pearson_1,pearson_2))+"')"
+	#	cur.execute(sql)
+	#print(stockid+" 计算 is ok 总计用时间"+str(time.time()-time1)) 
+	#conn.commit()
 
 def pearson(x,y):
 	n=len(x)
@@ -76,16 +108,16 @@ if __name__ == "__main__":
 	curall=conn.cursor()
 	cur=conn.cursor()
 	curall.execute("delete from stock")
-	#curall.execute("delete from target")
-	#curall.execute("delete from clac1")
+	# #curall.execute("delete from target")
+	# #curall.execute("delete from clac1")
 	curall.execute("SELECT CONCAT(CODE,class) FROM stock_code WHERE STATUS=1")
 	stone=curall.fetchall()
 	for r in stone:
-		try:
-			timer(str(r[0]))
-		except:
-			print("error   "+str(r[0]))
-			continue
+	 	try:
+	 		timer(str(r[0]))
+	 	except:
+	 		print("error   "+str(r[0]))
+	 		continue	
 	#target()
 	#for r in stone:
 	#	try:

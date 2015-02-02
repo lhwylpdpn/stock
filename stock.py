@@ -25,7 +25,6 @@ def timer (stockid):#核心函数，查URL写数据库,计算指标库
 	cur.execute(sql)
 	print(stockid+" is ok"+str(time.time()-time1)) 
 
-	conn.commit()
 
 def target():#写入各种参照值
 
@@ -113,11 +112,11 @@ if __name__ == "__main__":
 	curall.execute("SELECT CONCAT(CODE,class) FROM stock_code WHERE STATUS=1")
 	stone=curall.fetchall()
 	for r in stone:
-	 	try:
-	 		timer(str(r[0]))
-	 	except:
-	 		print("error   "+str(r[0]))
-	 		continue	
+	 	#try:
+	 	timer(str(r[0]))
+	 	#except:
+	 		#print("error   "+str(r[0]))
+	 			
 	#target()
 	#for r in stone:
 	#	try:

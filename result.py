@@ -25,7 +25,7 @@ def calc(ida,idb):#计算个股与指标之间的相关度
 		stockidB.append(r[2])
 		logresult.append(math.log(r[1])-math.log(r[2]))
 		sqlresult=sqlresult+" insert into temp values ('"+r[0]+"','"+str(math.log(r[1])-math.log(r[2]))+"'); "
-	cur.execute("delete from temp")
+
 	cur.execute(sqlresult)
 	conn.commit()
 

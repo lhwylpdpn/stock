@@ -45,9 +45,10 @@ def calc(ida,idb):#计算个股与指标之间的相关度
 		stockidB.append(r[2])
 		logresult.append(math.log(r[1])-math.log(r[2]))
 
-	print(sum(logresult)/len(logresult))
-	print(stdev(logresult))
-	sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"','"+str(norm(logresult[0],sum(logresult[0:30])/len(logresult[0:30]),stdev(logresult[0:30])))+"',null,null,'"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"',null,null,null,'"+str(sum(logresult)/len(logresult))+"',null,null,null,'"+str(stdev(logresult))+"'); "
+	#print(sum(logresult)/len(logresult))
+	#print(stdev(logresult))
+	sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"','"+str(norm(logresult[0],sum(logresult[0:30])/len(logresult[0:30]),stdev(logresult[0:30])))+"','"+str(norm(logresult[0],sum(logresult[0:90])/len(logresult[0:90]),stdev(logresult[0:90])))+"','"+str(norm(logresult[0],sum(logresult[0:365])/len(logresult[0:365]),stdev(logresult[0:365])))+"','"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"','"+str(sum(logresult[0:30])/len(logresult[0:30]))+"','"+str(sum(logresult[0:90])/len(logresult[0:90]))+"','"+str(sum(logresult[0:365])/len(logresult[0:365]))+"','"+str(sum(logresult)/len(logresult))+"','"+str(stdev(logresult[0:30]))+"','"+str(stdev(logresult[0:90]))+"','"+str(stdev(logresult[0:365]))+"','"+str(stdev(logresult))+"'); "
+	#sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"',null,null,null,'"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"',null,null,null,'"+str(sum(logresult)/len(logresult))+"',null,null,null,'"+str(stdev(logresult))+"'); "
 	cur.execute(sqlresult)
 	conn.commit()
 
@@ -57,15 +58,12 @@ if __name__ == "__main__":
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock',port=3306)
 	curall=conn.cursor()
 	cur=conn.cursor()
-	cur.execute("delete from temp")
+	cur.execute("delete from norm_data")
 	conn.commit()
 	stockid=[]
-	sql="select stockid from stock group by stockid "# 选取相关性强股票的策略
+	sql="SELECT stockidA,stockidB FROM `releation` WHERE relation_per_month>0.9 AND relation_per_year>0.8 LIMIT 10 "# 选取相关性强股票的策略
 	cur.execute(sql)
 	res=cur.fetchall()
 	for r in res:
-		stockid.append(r[0])
-	for i in range(len(stockid)):
-		for j in range(len(stockid)):
-			if i<j:
-				calc(stockid[i],stockid[j])
+		print(r[0],r[1]+"  is ok")
+		calc(r[0],r[1])

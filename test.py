@@ -42,7 +42,7 @@ def  CCI(high,low,close,n):
 	return r
 		
 if __name__ == "__main__":
-	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock',port=3306)
+	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock',port=3306)4
 	curall=conn.cursor()
 	cur=conn.cursor()
 	

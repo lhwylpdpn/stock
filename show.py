@@ -34,21 +34,30 @@ def req (stockid):#核心函数，查URL写数据库,计算指标库
 	print(stockid_now)
 	return stockid_now
 if __name__ == '__main__':
-
-	kong_price=26.91
-	duo_price=24.69
-	kong_count=200
-	duo_count=200
-	kong_now=req("sh600030")
-	duo_now=req("sh600999")
-	#当前营收价钱
-	f1=-((kong_price-float(kong_now))*kong_count+(float(duo_now)-duo_price)*duo_count)
-	#当前营收比例
-	f2=f1/(kong_price*kong_count+duo_count*duo_price)
-	#当前偏差情况
-	f3=math.log(float(kong_now))-math.log(float(duo_now))
-	f4=norm(f3,0.17201,0.0394025)
-	#预期收益
-	print(f1)
+	chengben=(21.047*300+20.843*500)/800
+	count=800
+	dangqian=req("sz002736")
+	f2=(float(dangqian)-float(chengben))*count
+	f3=f2/(chengben*count)
+	# kong_price=3.439
+	# duo_price=21.047
+	# kong_count=3000
+	# duo_count=300
+	# kong_now=req("sh510300")
+	# duo_now=req("sz002736")
+	# #当前营收价钱
+	# f1_1=(kong_price-float(kong_now))*kong_count
+	# f1_2=(float(duo_now)-duo_price)*duo_count
+	# f1=(kong_price-float(kong_now))*kong_count+(float(duo_now)-duo_price)*duo_count
+	# #当前营收比例
+	# f2=f1/(kong_price*kong_count+duo_count*duo_price)
+	# #当前偏差情况
+	# f3=math.log(float(kong_now))-math.log(float(duo_now))
+	# f4=norm(f3,0.17201,0.0394025)
+	# #预期收益
+	# print(f1_1)
+	# print(f1_2)
+	# print(f1)
+	print(chengben)
 	print(f2)
-	print(f4)
+	print(f3)

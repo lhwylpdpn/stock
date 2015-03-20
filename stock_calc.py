@@ -25,7 +25,7 @@ def calc():#计算个股与指标之间的相关度
 	for i in range(len(stockid)):
 		for j in range(len(stockid)):
 			if i<j:
-				sql="select a.date,a.close,b.close,a.per,b.per from stock a ,stock b where a.stockid='"+stockid[i]+"' and b.stockid='"+stockid[j]+"' and a.date=b.date order by date desc"
+				sql="select a.date,a.time,a.close,b.close,a.per,b.per from stock a ,stock b where a.stockid='"+stockid[i]+"' and b.stockid='"+stockid[j]+"' and a.date=b.date and a.time=b.time order by a.date,a.time desc"
 				cur.execute(sql)
 				res=cur.fetchall()
 				for r in res:

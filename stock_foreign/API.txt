@@ -1,0 +1,1 @@
+{'buyID':'GBPCHF60.csv',buyprice':'1.45609','sellID':'USDCHF60.csv','sellprice':'0.98838'}

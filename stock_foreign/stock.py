@@ -120,7 +120,7 @@ if __name__ == "__main__":
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 	cur=conn.cursor()
 	cur.execute("delete from releation")
-	loadcsv()
+	#loadcsv()
 	calc()
 	cur.close()
 	conn.close()

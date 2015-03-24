@@ -63,11 +63,11 @@ if __name__ == "__main__":
 	cur.execute("delete from norm_data")
 	conn.commit()
 	stockid=[]
-	sql="SELECT stockidA,stockidB FROM `releation` WHERE   relation_per_all>0.77 LIMIT 10 "# 选取相关性强股票的策略
+	sql="SELECT stockidA,stockidB FROM `releation` WHERE   relation_per_500>0.8 LIMIT 10 "# 选取相关性强股票的策略
 	cur.execute(sql)
 	res=cur.fetchall()
 	for r in res:
 		print(r[0],r[1]+"  is ok")
 		calc(r[0],r[1])
 
-
+	print()

@@ -46,7 +46,7 @@ def calc(ida,idb):#计算个股与指标之间的相关度
 		stockidA.append(r[1])
 		stockidB.append(r[2])
 		logresult.append(math.log(r[1])-math.log(r[2]))
-	print(logresult[0])
+	#print(logresult[0])
 	#print(sum(logresult)/len(logresult))
 	#print(stdev(logresult))
 	sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"','"+str(stockidA[0])+"','"+str(stockidB[0])+"','"+str(norm(logresult[0],sum(logresult[0:30])/len(logresult[0:30]),stdev(logresult[0:30])))+"','"+str(norm(logresult[0],sum(logresult[0:90])/len(logresult[0:90]),stdev(logresult[0:90])))+"','"+str(norm(logresult[0],sum(logresult[0:500])/len(logresult[0:500]),stdev(logresult[0:500])))+"','"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"','"+str(sum(logresult[0:30])/len(logresult[0:30]))+"','"+str(sum(logresult[0:90])/len(logresult[0:90]))+"','"+str(sum(logresult[0:500])/len(logresult[0:500]))+"','"+str(sum(logresult)/len(logresult))+"','"+str(stdev(logresult[0:30]))+"','"+str(stdev(logresult[0:90]))+"','"+str(stdev(logresult[0:500]))+"','"+str(stdev(logresult))+"'); "
@@ -70,4 +70,3 @@ if __name__ == "__main__":
 		print(r[0],r[1]+"  is ok")
 		calc(r[0],r[1])
 
-	print()

@@ -6,6 +6,29 @@ import csv
 import pymysql
 import time
 import os
+def loadcsv_add():
+	high=[]
+	low=[]
+	open_=[]
+	close=[]
+	name_=[]
+	date_=[]
+	time_=[]
+	sql=""
+	reader = csv.reader(open("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv"))
+	for row in reader:
+		name_.append(row[0]+"60.csv")
+		date_.append(row[1][0:10])
+		time_.append(row[1][11:16])
+		open_.append(row[2])
+		high.append(row[3])
+		low.append(row[4])
+		close.append(row[5])
+
+	for i in range(len(date_)):
+				
+		sql=sql+"insert into stock_foreign.stock values ('"+name_[i]+"','"+date_[i]+"','"+time_[i]+"','"+open_[i]+"','"+high[i]+"','"+low[i]+"','"+close[i]+"',0,'"+str((float(close[i])-float(open_[i]))/float(open_[i]))+"',null);"
+	cur.execute(sql)
 def getFileList( p ):
 	p = str( p )
 	if p=="":
@@ -42,7 +65,7 @@ def loadcsv ():#核心函数，查URL写数据库,计算指标库
 			if i==0:
 				sql=sql+"insert into stock_foreign.stock values ('"+filename+"','"+date_[i]+"','"+time_[i]+"','"+open_[i]+"','"+high[i]+"','"+low[i]+"','"+close[i]+"','"+amount[i]+"',0,null);"
 			else:
-				sql=sql+"insert into stock_foreign.stock values ('"+filename+"','"+date_[i]+"','"+time_[i]+"','"+open_[i]+"','"+high[i]+"','"+low[i]+"','"+close[i]+"','"+amount[i]+"','"+str((float(close[i])-float(close[i-1]))/float(open_[i-1]))+"',null);"
+				sql=sql+"insert into stock_foreign.stock values ('"+filename+"','"+date_[i]+"','"+time_[i]+"','"+open_[i]+"','"+high[i]+"','"+low[i]+"','"+close[i]+"','"+amount[i]+"','"+str((float(close[i])-float(close[i-1]))/float(close[i-1]))+"',null);"
 	cur.execute(sql)
 
 
@@ -85,13 +108,13 @@ def calc():#计算个股与指标之间的相关度
 				
 				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:30],close_2[0:30]))+"','"+str(pearson(close_1[0:500],close_2[0:500]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:30],per_2[0:30]))+"','"+str(pearson(per_1[0:500],per_2[0:500]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
 				cur.execute(sql)
-				print(str(pearson(close_1,close_2)))
-				print(str(pearson(per_1,per_2)))
-				print(str(pearson(close_1[0:30],close_2[0:30])))
-				print(str(pearson(per_1[0:30],per_2[0:30])))
-				print(str(pearson(close_1[0:500],close_2[0:500])))
-				print(str(pearson(per_1[0:500],per_2[0:500])))
-				print(len(res))
+				# print(str(pearson(close_1,close_2)))
+				# print(str(pearson(per_1,per_2)))
+				# print(str(pearson(close_1[0:30],close_2[0:30])))
+				# print(str(pearson(per_1[0:30],per_2[0:30])))
+				# print(str(pearson(close_1[0:500],close_2[0:500])))
+				# print(str(pearson(per_1[0:500],per_2[0:500])))
+				# print(len(res))
 
 				close_1=[]
 				close_2=[]
@@ -121,6 +144,7 @@ if __name__ == "__main__":
 	cur=conn.cursor()
 	cur.execute("delete from releation")
 	#loadcsv()
+	loadcsv_add()
 	calc()
 	cur.close()
 	conn.close()

@@ -27,19 +27,40 @@ def stdev(self):
 		stdev = (sdsq / (len(self) - 1)) ** .5
 		return stdev
 
-def req (stockid):#核心函数，查URL写数据库,计算指标库
+def req (stockid,chengben,count):#买多计算
 	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
 	data_line=testhtml.decode('GBK').split(',')
 	stockid_now=data_line[6]
-	print(stockid_now)
+	print(stockid_now,chengben,(float(stockid_now)-float(chengben))*float(count))
 	return stockid_now
+def req2 (stockid,chengben,count):#卖空计算
+	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
+	data_line=testhtml.decode('GBK').split(',')
+	stockid_now=data_line[6]
+	print(stockid_now,chengben,(float(chengben)-float(stockid_now))*float(count))
+	return stockid_now
+def clac (stockid,count):#卖空计算
+	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
+	data_line=testhtml.decode('GBK').split(',')
+	clac=(float(data_line[3])-float(data_line[1]))*float(count)
+
+	return clac
+def clac2 (stockid,count):#卖空计算
+	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
+	data_line=testhtml.decode('GBK').split(',')
+	clac=(float(data_line[1])-float(data_line[3]))*float(count)
+	
+	return clac
 if __name__ == '__main__':
-	chengben=(21.047*300+20.843*500)/800
-	count=800
-	dangqian=req("sz002736")
-	f2=(float(dangqian)-float(chengben))*count
-	f3=f2/(chengben*count)
+	chengben=4.106*4000+21.59*1000+34.41*1100+21.15*1000
+	chengben2=-4.106*4000+21.59*1000+34.41*1100+21.15*1000
+	dangqian=float(req("sh600369","21.59","1000"))*1000+31.96*1100+float(req("sz002736","21.15","1000"))*1000 - float(req2("sh510300","4.106","4000"))*4000
+
+	f2=(float(dangqian)-float(chengben2))
+	f3=f2/(chengben)
+	f4=f2+chengben+2057+7415
 	# kong_price=3.439
+	f6=clac("sh600369","1000")+clac("sz002736","1000")+clac2("sh510300","4000")
 	# duo_price=21.047
 	# kong_count=3000
 	# duo_count=300
@@ -61,3 +82,5 @@ if __name__ == '__main__':
 	print(chengben)
 	print(f2)
 	print(f3)
+	print(f4)
+	print(f6)

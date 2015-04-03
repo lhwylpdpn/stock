@@ -1,1 +1,2 @@
-{'buyID':'GBPCHF60.csv',buyprice':'1.45609','sellID':'USDCHF60.csv','sellprice':'0.98838'}
+{'buyID':'EURCHF60.csv',buyprice':'1.06941','sellID':'GBPCHF60.csv','sellprice':'1.4488','except_buy_price':'1.0712515635681417','except_sell_price':'1.4493824585681419'}
+{'buyID':'USDCHF60.csv',buyprice':'0.93864','sellID':'GBPCHF60.csv','sellprice':'1.4488','except_buy_price':'0.9511335183857508','except_sell_price':'1.4600997983857509'}

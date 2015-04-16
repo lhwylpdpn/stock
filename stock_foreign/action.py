@@ -79,6 +79,6 @@ if __name__ == "__main__":
 	time1=time.time()
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 	cur=conn.cursor()
-	sign(0.9,0.1,0.05)
+	sign(0.6,0.4,0.05)
 	cur.close()
 	conn.close()

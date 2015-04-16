@@ -6,26 +6,7 @@ import csv
 import pymysql
 import time
 import math
-def st_norm(u):
-	x=abs(u)/math.sqrt(2)
-	T=(0.0705230784,0.0422820123,0.0092705272,0.0001520143,0.0002765672,0.0000430638)
-	E=1-pow((1+sum([a*pow(x,(i+1)) for i,a in enumerate(T)])),-16)
-	p=0.5-0.5*E if u<0 else 0.5+0.5*E
-	return(p)
-  
-def norm(x,a,sigma):
-
-	u=(x-a)/sigma
-	return(st_norm(u))
-
-def stdev(self):
-	if len(self) < 1:
-		return None
-	else:
-		avg = sum(self)/len(self)
-		sdsq = sum([(i - avg) ** 2 for i in self])
-		stdev = (sdsq / (len(self) - 1)) ** .5
-		return stdev
+import json
 
 def req (stockid,chengben,count):#买多计算
 	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
@@ -42,25 +23,30 @@ def req2 (stockid,chengben,count):#卖空计算
 def clac (stockid,count):#卖空计算
 	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
 	data_line=testhtml.decode('GBK').split(',')
-	clac=(float(data_line[3])-float(data_line[1]))*float(count)
-
+	clac=(float(data_line[3])-float(data_line[2]))*float(count)
 	return clac
 def clac2 (stockid,count):#卖空计算
 	testhtml=urllib.request.urlopen("http://hq.sinajs.cn/list="+stockid).read()
 	data_line=testhtml.decode('GBK').split(',')
-	clac=(float(data_line[1])-float(data_line[3]))*float(count)
+	clac=(float(data_line[2])-float(data_line[3]))*float(count)
 	
 	return clac
 if __name__ == '__main__':
-	chengben=4.106*4000+21.59*1000+34.41*1100+21.15*1000
-	chengben2=-4.106*4000+21.59*1000+34.41*1100+21.15*1000
-	dangqian=float(req("sh600369","21.59","1000"))*1000+31.96*1100+float(req("sz002736","21.15","1000"))*1000 - float(req2("sh510300","4.106","4000"))*4000
 
-	f2=(float(dangqian)-float(chengben2))
-	f3=f2/(chengben)
-	f4=f2+chengben+2057+7415
-	# kong_price=3.439
-	f6=clac("sh600369","1000")+clac("sz002736","1000")+clac2("sh510300","4000")
+	file = 'F:/data-show/json/private.json'
+	f = open(file, 'r')
+	dict = json.dumps(f.read())
+	f.close()
+
+	chengben=21.59*1000+34.41*1100+20.96*1100+27.06*500
+	chengben2=21.59*1000+34.41*1100+20.96*1100+27.06*500
+	dangqian=float(req("sh600369","21.59","1000"))*1000+31.96*1100+float(req("sz002736","20.96","1100"))*1100+float(req("sh600109","27.06","500"))*500
+
+	f2=(float(dangqian)-float(chengben2))#收益
+	f3=f2/(chengben)#收益百分比
+	f4=f2+chengben+148.98+9803#总资金
+
+	#f6=
 	# duo_price=21.047
 	# kong_count=3000
 	# duo_count=300

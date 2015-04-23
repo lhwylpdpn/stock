@@ -52,9 +52,9 @@ def sign (p_gailv_high,p_gailv_low,point):#核心函数，查URL写数据库,计
 				except_buy_price_temp,except_sell_price_temp=banlace(r[2],r[3],scipy.stats.norm.ppf(p_gailv_low,r[5],r[6]),point)
 				except_buy_price.append(except_buy_price_temp)
 				except_sell_price.append(except_sell_price_temp)
-		write_API(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price)
+		#write_API(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price)
 		result_DB(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price)
-
+		print(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price)
 def write_API(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price):
 	json=""
 	file_object = open("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API.txt",'w')
@@ -79,6 +79,6 @@ if __name__ == "__main__":
 	time1=time.time()
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 	cur=conn.cursor()
-	sign(0.6,0.4,0.05)
+	sign(0.6,0.4,0.5)
 	cur.close()
 	conn.close()

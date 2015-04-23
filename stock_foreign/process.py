@@ -225,17 +225,17 @@ def result_DB(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_se
 if __name__ == "__main__":
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 	
-	cur_stock=conn.cursor()
-	cur_action=conn.cursor()
-
-	cur_result=conn.cursor()
 
 	
 	
 
 	while(1):
+
 		if  (os.path.getsize("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv")!=0):
-			print("有新增数据入库")
+			cur_stock=conn.cursor()
+			cur_action=conn.cursor()
+			cur_result=conn.cursor()
+			print("有新增数据入库"+str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 			time.sleep(60)
 	
 			cur_stock.execute("delete from releation")
@@ -248,8 +248,10 @@ if __name__ == "__main__":
 			res=cur_result.fetchall()
 			for j in res:
 				calc(j[0],j[1])
-			sign(0.9,0.1,0.01)
-			
+			sign(0.9,0.1,0.5)
+			cur_result.close()
+			cur_action.close()
+			cur_stock.close()
 
 	conn.close()
 

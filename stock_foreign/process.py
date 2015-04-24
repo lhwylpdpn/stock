@@ -248,7 +248,7 @@ if __name__ == "__main__":
 			res=cur_result.fetchall()
 			for j in res:
 				calc(j[0],j[1])
-			sign(0.9,0.1,0.5)
+			sign(0.95,0.05,0.15)
 			cur_result.close()
 			cur_action.close()
 			cur_stock.close()

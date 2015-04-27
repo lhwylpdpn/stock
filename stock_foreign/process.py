@@ -64,7 +64,7 @@ def calc1():#计算个股与指标之间的相关度
 					date1.append(str(r[0]))
 					time1.append(str(r[1]))
 				
-				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:30],close_2[0:30]))+"','"+str(pearson(close_1[0:500],close_2[0:500]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:30],per_2[0:30]))+"','"+str(pearson(per_1[0:500],per_2[0:500]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
+				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:500],close_2[0:500]))+"','"+str(pearson(close_1[0:1000],close_2[0:1000]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:500],per_2[0:500]))+"','"+str(pearson(per_1[0:1000],per_2[0:1000]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
 				cur_stock.execute(sql)
 				# print(str(pearson(close_1,close_2)))
 				# print(str(pearson(per_1,per_2)))
@@ -141,7 +141,7 @@ def calc(ida,idb):#计算个股与指标之间的相关度
 	#print(logresult[0])
 	#print(sum(logresult)/len(logresult))
 	#print(stdev(logresult))
-	sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"','"+str(stockidA[0])+"','"+str(stockidB[0])+"','"+str(norm(logresult[0],sum(logresult[0:30])/len(logresult[0:30]),stdev(logresult[0:30])))+"','"+str(norm(logresult[0],sum(logresult[0:90])/len(logresult[0:90]),stdev(logresult[0:90])))+"','"+str(norm(logresult[0],sum(logresult[0:500])/len(logresult[0:500]),stdev(logresult[0:500])))+"','"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"','"+str(sum(logresult[0:30])/len(logresult[0:30]))+"','"+str(sum(logresult[0:90])/len(logresult[0:90]))+"','"+str(sum(logresult[0:500])/len(logresult[0:500]))+"','"+str(sum(logresult)/len(logresult))+"','"+str(stdev(logresult[0:30]))+"','"+str(stdev(logresult[0:90]))+"','"+str(stdev(logresult[0:500]))+"','"+str(stdev(logresult))+"'); "
+	sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"','"+str(stockidA[0])+"','"+str(stockidB[0])+"','"+str(norm(logresult[0],sum(logresult[0:100])/len(logresult[0:100]),stdev(logresult[0:100])))+"','"+str(norm(logresult[0],sum(logresult[0:500])/len(logresult[0:500]),stdev(logresult[0:500])))+"','"+str(norm(logresult[0],sum(logresult[0:1000])/len(logresult[0:1000]),stdev(logresult[0:1000])))+"','"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"','"+str(sum(logresult[0:100])/len(logresult[0:100]))+"','"+str(sum(logresult[0:500])/len(logresult[0:500]))+"','"+str(sum(logresult[0:1000])/len(logresult[0:1000]))+"','"+str(sum(logresult)/len(logresult))+"','"+str(stdev(logresult[0:100]))+"','"+str(stdev(logresult[0:500]))+"','"+str(stdev(logresult[0:1000]))+"','"+str(stdev(logresult))+"'); "
 	#sqlresult=" insert into norm_data values ('"+ida+"','"+idb+"',null,null,null,'"+str(norm(logresult[0],sum(logresult)/len(logresult),stdev(logresult)))+"',null,null,null,'"+str(sum(logresult)/len(logresult))+"',null,null,null,'"+str(stdev(logresult))+"'); "
 	cur_result.execute(sqlresult)
 	conn.commit()
@@ -169,7 +169,7 @@ def sign (p_gailv_high,p_gailv_low,point):#核心函数，查URL写数据库,计
 	except_sell_price=[]
 	except_buy_price_temp=""
 	except_sell_price_temp=""
-	sql="SELECT stockidA,stockidB,stockida_price,stockidb_price,normvalue_per_500,norm_avg_500,norm_stdev_500 FROM norm_data WHERE (normvalue_per_500> '"+str(p_gailv_high)+"' or normvalue_per_500<'"+str(p_gailv_low)+"')"
+	sql="SELECT stockidA,stockidB,stockida_price,stockidb_price,normvalue_per_1000,norm_avg_1000,norm_stdev_1000 FROM norm_data WHERE (normvalue_per_1000> '"+str(p_gailv_high)+"' or normvalue_per_1000<'"+str(p_gailv_low)+"')"
 	cur_action.execute(sql)
 	res=cur_action.fetchall()
 	if len(res)>0:
@@ -223,7 +223,7 @@ def result_DB(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_se
 
 
 if __name__ == "__main__":
-	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
+	
 	
 
 	
@@ -232,6 +232,7 @@ if __name__ == "__main__":
 	while(1):
 
 		if  (os.path.getsize("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv")!=0):
+			conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 			cur_stock=conn.cursor()
 			cur_action=conn.cursor()
 			cur_result=conn.cursor()
@@ -243,17 +244,16 @@ if __name__ == "__main__":
 			calc1()
 			cur_result.execute("delete from norm_data")
 			stockid=[]
-			sql233="SELECT stockidA,stockidB FROM `releation` WHERE   relation_per_500>0.8 LIMIT 10"
+			sql233="SELECT stockidA,stockidB FROM `releation` WHERE   relation_per_1000>0.8 LIMIT 10"
 			cur_result.execute(sql233)
 			res=cur_result.fetchall()
 			for j in res:
 				calc(j[0],j[1])
-			sign(0.95,0.05,0.15)
+			sign(0.9,0.1,0.15)
 			cur_result.close()
 			cur_action.close()
 			cur_stock.close()
-
-	conn.close()
+			conn.close()
 
 
 

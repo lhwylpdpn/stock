@@ -16,7 +16,7 @@ def loadcsv_add():
 	name_=[]
 	date_=[]
 	time_=[]
-	filename='C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv'
+	filename='C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv'
 	sql=""
 	reader = csv.reader(open(filename))
 	for row in reader:
@@ -31,6 +31,11 @@ def loadcsv_add():
 				
 		sql=sql+"insert into stock_foreign.stock values ('"+name_[i]+"','"+date_[i]+"','"+time_[i]+"','"+open_[i]+"','"+high[i]+"','"+low[i]+"','"+close[i]+"',0,'"+str((float(close[i])-float(open_[i]))/float(open_[i]))+"',null);"
 	cur_stock.execute(sql)
+
+
+def loadcsv_add_clear():
+
+	filename='C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv'
 	file_object = open(filename,'w')
 	file_object.write("")
 	file_object.close()
@@ -64,7 +69,7 @@ def calc1():#计算个股与指标之间的相关度
 					date1.append(str(r[0]))
 					time1.append(str(r[1]))
 				
-				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:500],close_2[0:500]))+"','"+str(pearson(close_1[0:1000],close_2[0:1000]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:500],per_2[0:500]))+"','"+str(pearson(per_1[0:1000],per_2[0:1000]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
+				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:100],close_2[0:100]))+"','"+str(pearson(close_1[0:1000],close_2[0:1000]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:100],per_2[0:100]))+"','"+str(pearson(per_1[0:1000],per_2[0:1000]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
 				cur_stock.execute(sql)
 				# print(str(pearson(close_1,close_2)))
 				# print(str(pearson(per_1,per_2)))
@@ -169,7 +174,7 @@ def sign (p_gailv_high,p_gailv_low,point):#核心函数，查URL写数据库,计
 	except_sell_price=[]
 	except_buy_price_temp=""
 	except_sell_price_temp=""
-	sql="SELECT stockidA,stockidB,stockida_price,stockidb_price,normvalue_per_1000,norm_avg_1000,norm_stdev_1000 FROM norm_data WHERE (normvalue_per_1000> '"+str(p_gailv_high)+"' or normvalue_per_1000<'"+str(p_gailv_low)+"')"
+	sql="SELECT stockidA,stockidB,stockida_price,stockidb_price,normvalue_per_100,norm_avg_100,norm_stdev_100 FROM norm_data WHERE (normvalue_per_100> '"+str(p_gailv_high)+"' or normvalue_per_100<'"+str(p_gailv_low)+"')"
 	cur_action.execute(sql)
 	res=cur_action.fetchall()
 	if len(res)>0:
@@ -198,10 +203,10 @@ def sign (p_gailv_high,p_gailv_low,point):#核心函数，查URL写数据库,计
 
 def write_API(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price):
 	json=""
-	file_object = open("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API.txt",'w')
+	file_object = open("C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API.txt",'w')
 	for r in range(len(stocka)):
 		#json=json+"'buyID':'"+str(stocka[r])+"',buyprice':'"+str(stocka_price[r])+"','sellID':'"+str(stockb[r])+"','sellprice':'"+str(stockb_price[r])+"','except_buy_price':'"+str(except_buy_price[r])+"','except_sell_price':'"+str(except_sell_price[r])+"'"+"\n"
-		json=json+str(stocka[r][0:6])+","+str(stocka_price[r])+","+str(stockb[r][0:6])+","+str(stockb_price[r])+","+str(except_buy_price[r])+","+str(except_sell_price[r])+"\n"
+		json=json+str(stocka[r][0:9])+","+str(stocka_price[r])+","+str(stockb[r][0:9])+","+str(stockb_price[r])+","+str(except_buy_price[r])+","+str(except_sell_price[r])+"\n"
 		#print(math.log(stocka_price[r])-math.log(stockb_price[r])) #buy-sell>except 就平仓
 		#print(except_norm[r])
 		#print(math.log(stocka_price[r]/stockb_price[r]))
@@ -231,31 +236,32 @@ if __name__ == "__main__":
 
 	while(1):
 
-		if  (os.path.getsize("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv")!=0):
+		if  (os.path.getsize("C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv")!=0):
 			conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 			cur_stock=conn.cursor()
 			cur_action=conn.cursor()
 			cur_result=conn.cursor()
 			print("有新增数据入库"+str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
-			time.sleep(60)
+			
 	
 			cur_stock.execute("delete from releation")
 			loadcsv_add()
 			calc1()
 			cur_result.execute("delete from norm_data")
 			stockid=[]
-			sql233="SELECT stockidA,stockidB FROM `releation` WHERE   relation_per_1000>0.8 LIMIT 10"
+			sql233="SELECT stockidA,stockidB FROM `releation` WHERE   relation_per_100>0.95 LIMIT 10"
 			cur_result.execute(sql233)
 			res=cur_result.fetchall()
 			for j in res:
 				calc(j[0],j[1])
-			sign(0.9,0.1,0.15)
+			sign(0.99,0.01,0.15)
 			cur_result.close()
 			cur_action.close()
 			cur_stock.close()
 			conn.close()
-
-
+			print("计算完成"+str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+			time.sleep(60)
+			loadcsv_add_clear()
 
 	# result.conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 	# result.curall=result.conn.cursor()

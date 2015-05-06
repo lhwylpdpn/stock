@@ -35,7 +35,7 @@ CREATE TABLE `active_trade` (
   `profit` float DEFAULT NULL,
   `class` varchar(40) DEFAULT NULL,
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `norm_data` */
 
@@ -81,7 +81,7 @@ CREATE TABLE `order` (
   `action_buy_price` float DEFAULT NULL,
   `action_sell_price` float DEFAULT NULL,
   KEY `orderid` (`orderid`)
-) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=365 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `releation` */
 
@@ -90,10 +90,10 @@ DROP TABLE IF EXISTS `releation`;
 CREATE TABLE `releation` (
   `stockidA` varchar(45) DEFAULT NULL,
   `stockidB` varchar(45) DEFAULT NULL,
-  `relation_price_500` float DEFAULT NULL,
+  `relation_price_100` float DEFAULT NULL,
   `relation_price_1000` float DEFAULT NULL,
   `relation_price_all` float DEFAULT NULL,
-  `relation_per_500` float DEFAULT NULL,
+  `relation_per_100` float DEFAULT NULL,
   `relation_per_1000` float DEFAULT NULL,
   `relation_per_all` float DEFAULT NULL,
   `all_count` varchar(45) DEFAULT NULL

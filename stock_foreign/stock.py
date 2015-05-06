@@ -15,7 +15,7 @@ def loadcsv_add():
 	date_=[]
 	time_=[]
 	sql=""
-	reader = csv.reader(open("C:/Users/dell/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv"))
+	reader = csv.reader(open("C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/50CA3DFB510CC5A8F28B48D1BF2A5702/MQL4/Files/API_callback.csv"))
 	for row in reader:
 		name_.append(row[0]+"60.csv")
 		date_.append(row[1][0:10])
@@ -106,7 +106,7 @@ def calc():#计算个股与指标之间的相关度
 					date1.append(str(r[0]))
 					time1.append(str(r[1]))
 				
-				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:30],close_2[0:30]))+"','"+str(pearson(close_1[0:500],close_2[0:500]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:30],per_2[0:30]))+"','"+str(pearson(per_1[0:500],per_2[0:500]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
+				sql="insert into releation values('"+stockid[i]+"','"+stockid[j]+"','"+str(pearson(close_1[0:100],close_2[0:100]))+"','"+str(pearson(close_1[0:1000],close_2[0:1000]))+"','"+str(pearson(close_1,close_2))+"','"+str(pearson(per_1[0:100],per_2[0:100]))+"','"+str(pearson(per_1[0:1000],per_2[0:1000]))+"','"+str(pearson(per_1,per_2))+"','"+str(len(res))+"')"
 				cur.execute(sql)
 				# print(str(pearson(close_1,close_2)))
 				# print(str(pearson(per_1,per_2)))
@@ -142,9 +142,9 @@ if __name__ == "__main__":
 	time1=time.time()
 	conn=pymysql.connect(host='localhost',user='root',passwd='123456',db='stock_foreign',port=3306)
 	cur=conn.cursor()
-	cur.execute("delete from stock")
+
 	loadcsv()
 	#loadcsv_add()
-	#calc()
+	calc()
 	cur.close()
 	conn.close()

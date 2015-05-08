@@ -198,8 +198,8 @@ def sign (p_gailv_high,p_gailv_low,point):#核心函数，查URL写数据库,计
 				except_buy_price_temp,except_sell_price_temp=banlace(r[2],r[3],scipy.stats.norm.ppf(p_gailv_low,r[5],r[6]),point)
 				except_buy_price.append(except_buy_price_temp)
 				except_sell_price.append(except_sell_price_temp)
-		write_API(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price)
-		result_DB(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_sell_price)
+		write_API(stockb,stocka,stockb_price,stocka_price,except_buy_price,except_sell_price)#调整为顺势
+		result_DB(stockb,stocka,stockb_price,stocka_price,except_buy_price,except_sell_price)#调整为顺势
 
 def sign_no_limit (p_gailv_high,p_gailv_low):#核心函数，查URL写数据库,计算指标库
 	stocka=[]
@@ -217,7 +217,7 @@ def sign_no_limit (p_gailv_high,p_gailv_low):#核心函数，查URL写数据库,
 	sql="SELECT stockidA,stockidB,stockida_price,stockidb_price,normvalue_per_100,norm_avg_100,norm_stdev_100 FROM norm_data WHERE ((stockidA='AUDCHF...60.csv' AND stockidB='CADCHF...60.csv') OR (stockidA='CADCHF...60.csv' AND stockidB='AUDCHF...60.csv')) and (normvalue_per_100> '"+str(p_gailv_high)+"' or normvalue_per_100<'"+str(p_gailv_low)+"')"
 	cur_action.execute(sql)
 	res=cur_action.fetchall()
-	if len(res)>0:
+	if any(res):
 		for r in res:
 			norm.append(r[4])
 			norm_avg.append(r[5])
@@ -248,6 +248,7 @@ def write_API(stocka,stockb,stocka_price,stockb_price,except_buy_price,except_se
 		json=json+str(stocka[r][0:9])+","+str(stocka_price[r])+","+str(stockb[r][0:9])+","+str(stockb_price[r])+","+str(except_buy_price[r])+","+str(except_sell_price[r])+"\n"
 		#print(math.log(stocka_price[r])-math.log(stockb_price[r])) #buy-sell>except 就平仓
 		#print(except_norm[r])
+
 		#print(math.log(stocka_price[r]/stockb_price[r]))
 		#print(math.exp(except_norm[r]))
 	file_object.write(json)

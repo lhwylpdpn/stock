@@ -32,20 +32,20 @@ def report_load_all ():#核心函数，查URL写数据库,计算指标库
 		report_time=[]
 		buyprice_except_open=[]
 		sellprice_except_open=[]
-
+		stockid=[]
 		reader = csv.reader(open("static-data/"+filename))
 		for row in reader:
-			
-			orderid.append(row[0])
-			open_price.append(row[1])
-			open_time.append(row[2])
-			close_price.append(row[3])
-			close_time.append(row[4])
-			profit.append(row[5])
-			report_time.append(row[8])
-			buyprice_except_open.append(row[9])
-			sellprice_except_open.append(row[10])
-			sql=sql+"insert into report_order values (null,'"+str(row[0])+"','"+str(row[1])+"','"+str(row[2])+"','"+str(row[3])+"','"+str(row[4])+"','"+str(row[5])+"','"+str(row[8])+"','"+str(row[9])+"','"+str(row[10])+"');"
+			stockid.append(row[0])
+			orderid.append(row[1])
+			open_price.append(row[2])
+			open_time.append(row[3])
+			close_price.append(row[4])
+			close_time.append(row[5])
+			profit.append(row[6])
+			report_time.append(row[9])
+			buyprice_except_open.append(row[10])
+			sellprice_except_open.append(row[11])
+			sql=sql+"insert into report_order values (null,'"+str(row[0])+"','"+str(row[1])+"','"+str(row[2])+"','"+str(row[3])+"','"+str(row[4])+"','"+str(row[5])+"','"+str(row[6])+"','"+str(row[9])+"','"+str(row[10])+"','"+str(row[11])+"');"
 		cur.execute(sql)
 
 if __name__ == "__main__":

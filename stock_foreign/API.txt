@@ -1,1 +1,0 @@
-{'buyID':'EURCHF60.csv',buyprice':'1.0333','sellID':'GBPCHF60.csv','sellprice':'1.43524','except_buy_price':'1.035644101533819','except_sell_price':'1.4363498315338188'}
